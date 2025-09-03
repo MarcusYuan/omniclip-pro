@@ -1,6 +1,6 @@
 {
-  "name": "@omnimedia/omniclip",
-  "version": "1.1.3",
+  "name": "@MarcusYuan/omniclip-pro",
+  "version": "0.0.1",
   "description": "",
   "main": "x/index.js",
   "files": [
@@ -20,7 +20,7 @@
     "copy-coi": "cp node_modules/coi-serviceworker/coi-serviceworker.js x/",
     "copy-assets": "cp -r assets x/"
   },
-  "author": "zenkyuv",
+  "author": "MarcusYuan",
   "license": "ISC",
   "devDependencies": {
     "@benev/turtle": "^0.5.1",
