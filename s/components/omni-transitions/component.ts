@@ -2,7 +2,7 @@ import {Op, generate_id, html} from "@benev/slate"
 
 import {styles} from "./styles.js"
 import transitionSvg from "../../icons/transition.svg.js"
-import {shadow_component} from "../../context/context.js"
+import {omnislate, shadow_component} from "../../context/context.js"
 import {StateHandler} from "../../views/state-handler/view.js"
 import circleInfoSvg from "../../icons/gravity-ui/circle-info.svg.js"
 import circlePlaySvg from "../../icons/gravity-ui/circle-play.svg.js"
@@ -118,7 +118,8 @@ export const OmniTransitions = shadow_component(use => {
 		`
 	}
 
-	return StateHandler(Op.all(
+	const {loadingState, errorState} = (omnislate as any).views
+	return StateHandler(loadingState, errorState)(Op.all(
 		use.context.helpers.ffmpeg.is_loading.value,
 		use.context.is_webcodecs_supported.value), () => html`
 		<div class="transitions">

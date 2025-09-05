@@ -38,7 +38,7 @@ export class Waveform {
 		const file = await this.media.get_file(this.effect.file_hash)!
 		if(file) {
 			const uint = await fetchFile(file)
-			const blob = new Blob([uint])
+			const blob = new Blob([new Uint8Array(uint)])
 			const url = URL.createObjectURL(blob)
 			await this.#wavesurfer.load(url)
 			this.update_waveform(state)

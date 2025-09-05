@@ -1,5 +1,6 @@
 import {generate_id, flat} from "@benev/slate"
 
+import {PIXI} from "../../../../proxies/pixi.js"
 import {Compositor} from "../controller.js"
 import {Actions} from "../../../actions.js"
 import {LineJoin} from "../../../pixi.mjs.js"
@@ -105,7 +106,7 @@ export class TextManager extends Map<string, {sprite: PIXI.Text, transformer: PI
 		transformer.ignoreAlign = true
 		//@ts-ignore
 		text.ignoreAlign = false
-		text.on('pointerdown', (e) => {
+		text.on('pointerdown', (e: PIXI.FederatedPointerEvent) => {
 			this.compositor.canvasElementDrag.onDragStart(e, text, transformer)
 			this.compositor.app.stage.addChild(transformer)
 		})

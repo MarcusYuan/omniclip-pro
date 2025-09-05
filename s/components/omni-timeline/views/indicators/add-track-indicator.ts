@@ -1,8 +1,8 @@
 import {html} from "@benev/slate"
 
-import {light_view} from "../../../../context/context.js"
+import {omnislate} from "../../../../context/context.js"
 
-export const AddTrackIndicator = light_view(use => (index: number) => {
+export const AddTrackIndicator = () => omnislate.light_view(use => (index: number) => {
 	const drag = use.context.controllers.timeline.effectDragHandler
 	const [indicator, setIndicator] = use.state(false)
 

@@ -4,7 +4,7 @@ import {styles} from "./styles.js"
 import loadingSvg from "../../icons/loading.svg.js"
 import addSvg from "../../icons/gravity-ui/add.svg.js"
 import binSvg from "../../icons/gravity-ui/bin.svg.js"
-import {shadow_component} from "../../context/context.js"
+import {omnislate, shadow_component} from "../../context/context.js"
 import importFileSvg from "../../icons/import-file.svg.js"
 import {StateHandler} from "../../views/state-handler/view.js"
 import audioWaveSvg from "../../icons/material-design-icons/audio-wave.svg.js"
@@ -176,7 +176,8 @@ export const OmniMedia = shadow_component((use) => {
 		`
 	}
 
-	return StateHandler(
+	const {loadingState, errorState} = (omnislate as any).views
+	return StateHandler(loadingState, errorState)(
 		Op.all(use.context.is_webcodecs_supported.value, use.context.helpers.ffmpeg.is_loading.value),
 		() => html`
 		<div class="media-panel ${dragActive ? "drag-active" : ""}"

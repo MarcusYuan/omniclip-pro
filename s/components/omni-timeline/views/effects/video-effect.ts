@@ -5,7 +5,7 @@ import {shadow_view} from "../../../../context/context.js"
 import {VideoEffect as XVideoEffect} from "../../../../context/types.js"
 import {Filmstrip} from "../../../../context/controllers/timeline/parts/filmstrip.js"
 
-export const VideoEffect = shadow_view(use => (effect: XVideoEffect, timeline: GoldElement) => {
+export const VideoEffect = () => shadow_view(use => (effect: XVideoEffect, timeline: GoldElement) => {
 	use.watch(() => use.context.state)
 	const media = use.context.controllers.media
 	const compositor = use.context.controllers.compositor
@@ -75,7 +75,7 @@ export const VideoEffect = shadow_view(use => (effect: XVideoEffect, timeline: G
 			</div>`
 	}
 
-	return html`${Effect([timeline, effect, html`${render_filmstrip()}`, css`
+	return html`${Effect()([timeline, effect, html`${render_filmstrip()}`, css`
 		.content {
 			pointer-events: none;
 			width: 100%;

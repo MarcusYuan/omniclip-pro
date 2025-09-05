@@ -1,5 +1,6 @@
 import {pub} from "@benev/slate"
 
+import {PIXI} from "../../../../proxies/pixi.js"
 import {Compositor} from "../controller.js"
 import {Actions} from "../../../actions.js"
 import {ImageEffect, VideoEffect} from "../../../types.js"

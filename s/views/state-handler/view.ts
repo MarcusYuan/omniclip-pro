@@ -4,12 +4,12 @@ import {html, TemplateResult} from "@benev/slate"
 import {styles} from "./styles.js"
 import {shadow_view} from "../../context/context.js"
 
-const loadingState = shadow_view(use => () => {
+export const loadingState = () => shadow_view(use => () => {
 	use.styles(styles)
 	return html`<div class="container"></div>`
 })
 
-const errorState = shadow_view(use => (reason: string) => {
+export const errorState = () => shadow_view(use => (reason: string) => {
 	use.styles(styles)
 	if(reason === "webcodecs-not-supported") {
 		return html`
@@ -29,8 +29,11 @@ const errorState = shadow_view(use => (reason: string) => {
 	}
 })
 
-export const StateHandler = prep_render_op({
-	loading: () => loadingState([]),
-	error: (reason) => errorState([reason])
+export const StateHandler = (
+	loading: () => ReturnType<typeof loadingState>,
+	error: () => ReturnType<typeof errorState>
+) => prep_render_op({
+	loading: () => loading()([]),
+	error: (reason) => error()([reason])
 }) as (op: Op.For<any>, on_ready: (value: any) => TemplateResult) => TemplateResult
 

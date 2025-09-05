@@ -5,7 +5,7 @@ import {shadow_view} from "../../../../context/context.js"
 import playheadSvg from "../../../../icons/remix-icon/playhead.svg.js"
 import {calculate_timeline_width} from "../../utils/calculate_timeline_width.js"
 
-export const Playhead = shadow_view(use => (timeline: GoldElement) => {
+export const Playhead = () => shadow_view(use => (timeline: GoldElement) => {
 	use.styles(styles)
 	use.watch(() => use.context.state)
 	const actions = use.context.actions

@@ -1,5 +1,6 @@
 import {generate_id} from "@benev/slate"
 
+import {PIXI} from "../../../../proxies/pixi.js"
 import {Compositor} from "../controller.js"
 import {Actions} from "../../../actions.js"
 import {ImageEffect, State} from "../../../types.js"
@@ -69,7 +70,7 @@ export class ImageManager extends Map<string, {sprite: PIXI.Sprite, transformer:
 		sprite.ignoreAlign = false
 		transformer.ignoreAlign = true
 		transformer.name = generate_id()
-		sprite.on('pointerdown', (e) => {
+		sprite.on('pointerdown', (e: PIXI.FederatedPointerEvent) => {
 			this.compositor.canvasElementDrag.onDragStart(e, sprite, transformer)
 			this.compositor.app.stage.addChild(transformer)
 		})

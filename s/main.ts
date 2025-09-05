@@ -28,6 +28,7 @@ import {omnislate, OmniContext, collaboration} from "./context/context.js"
 import {OmniTransitions} from "./components/omni-transitions/component.js"
 import {ExportPanel} from "./components/omni-timeline/views/export/panel.js"
 import {MediaPlayerPanel} from "./components/omni-timeline/views/media-player/panel.js"
+import {register_views} from './views.js'
 import {ExportConfirmModal, ExportInProgressOverlay} from './components/omni-timeline/views/export/view.js'
 
 posthog.init('phc_CMbHMWGVJSqM1RqGyGxWCyqgaSGbGFKl964fIN3NDwU',
@@ -44,21 +45,22 @@ export function setupContext(projectId: string) {
 	omnislate.context = new OmniContext({
 		projectId,
 		panels: {
-			TimelinePanel,
-			MediaPanel,
-			MediaPlayerPanel,
-			TextPanel,
-			ExportPanel,
-			ProjectSettingsPanel,
-			AnimPanel,
-			FiltersPanel,
-			TransitionsPanel
+			TimelinePanel: TimelinePanel(),
+			MediaPanel: MediaPanel(),
+			MediaPlayerPanel: MediaPlayerPanel(),
+			TextPanel: TextPanel(),
+			ExportPanel: ExportPanel(),
+			ProjectSettingsPanel: ProjectSettingsPanel(),
+			AnimPanel: AnimPanel(),
+			FiltersPanel: FiltersPanel(),
+			TransitionsPanel: TransitionsPanel()
 		},
 		layouts: {
 			empty: single_panel_layout("TimelinePanel"),
 			default: single_panel_layout("TimelinePanel"),
 		},
 	})
+	register_views()
 	return omnislate
 }
 
@@ -96,8 +98,8 @@ const VideoEditor =  (omnislate: Nexus<OmniContext>) => omnislate.light_view((us
 	return html`
 		<div class=editor>
 			${IS_TEST_ENV ? TestEnvAlert : null}
-			${ExportConfirmModal([showConfirmExportModal, setShowConfirmExportModal])}
-			${ExportInProgressOverlay([])}
+			${ExportConfirmModal()([showConfirmExportModal, setShowConfirmExportModal])}
+			${ExportInProgressOverlay()([])}
 			<div class=editor-header>
 				<div class=flex>
 					<img class="logo" src="/assets/icon3.png" />
@@ -111,9 +113,9 @@ const VideoEditor =  (omnislate: Nexus<OmniContext>) => omnislate.light_view((us
 					</div>
 				</div>
 				<div class="export">
-					${CollaborationManager([])}
-					${ShortcutsManager([])}
-					${Tooltip(
+					${CollaborationManager()([])}
+					${ShortcutsManager()([])}
+					${Tooltip()(
 						html`
 						<button
 							?disabled=${use.context.state.settings.bitrate <= 0 || isClient}

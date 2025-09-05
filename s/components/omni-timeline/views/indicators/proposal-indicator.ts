@@ -1,6 +1,6 @@
 import {html} from "@benev/slate"
 
-import {light_view} from "../../../../context/context.js"
+import {omnislate} from "../../../../context/context.js"
 import {ProposedTimecode} from "../../../../context/types.js"
 import {calculate_effect_width} from "../../utils/calculate_effect_width.js"
 import {calculate_start_position} from "../../utils/calculate_start_position.js"
@@ -9,7 +9,7 @@ import {calculate_effect_track_placement} from "../../utils/calculate_effect_tra
 import {getEffectsOnTrack} from "../../../../context/controllers/timeline/utils/get-effects-on-track.js"
 import {EffectDrag, EffectDrop} from "../../../../context/controllers/timeline/parts/drag-related/effect-drag.js"
 
-export const ProposalIndicator = light_view(use => () => {
+export const ProposalIndicator = () => omnislate.light_view(use => () => {
 	const controller = use.context.controllers.timeline
 	const zoom = use.context.state.zoom
 	const trim_handler = use.context.controllers.timeline.effectTrimHandler

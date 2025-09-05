@@ -1,5 +1,6 @@
 import {file} from "./opfs-manager.js"
-import type {OPFSFileWrap} from "opfs-tools/dist/file"
+
+type OPFSFileWrap = ReturnType<typeof file>
 
 interface WriteFileChunk {
 	action: 'writeChunk'

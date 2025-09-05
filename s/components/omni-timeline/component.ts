@@ -7,7 +7,7 @@ import {Toolbar} from "./views/toolbar/view.js"
 import {Playhead} from "./views/playhead/view.js"
 import {TimeRuler} from "./views/time-ruler/view.js"
 import {TrackSidebar} from "./views/sidebar/view.js"
-import {shadow_component} from "../../context/context.js"
+import {omnislate, shadow_component} from "../../context/context.js"
 import {TextEffect} from "./views/effects/text-effect.js"
 import {VideoEffect} from "./views/effects/video-effect.js"
 import {AudioEffect} from "./views/effects/audio-effect.js"
@@ -70,19 +70,19 @@ export const OmniTimeline = shadow_component(use => {
 		effect_drag_over(event)
 	}
 
-	const render_tracks = () => repeat(use.context.state.tracks, ((_track, i) => Track([i], {attrs: {part: "add-track-indicator"}})))
+	const render_tracks = () => repeat(use.context.state.tracks, ((_track, i) => Track()([i], {attrs: {part: "add-track-indicator"}})))
 	const render_effects = () => repeat(use.context.state.effects, (effect) => effect.id, (effect) => {
 		if(effect.kind === "audio") {
-			return AudioEffect([effect, use.element])
+			return AudioEffect()([effect, use.element])
 		}
 		else if (effect.kind === "video") {
-			return VideoEffect([effect, use.element])
+			return VideoEffect()([effect, use.element])
 		}
 		else if (effect.kind === "text") {
-			return TextEffect([effect, use.element])
+			return TextEffect()([effect, use.element])
 		}
 		else if(effect.kind === "image") {
-			return ImageEffect([effect, use.element])
+			return ImageEffect()([effect, use.element])
 		}
 	})
 
@@ -99,29 +99,30 @@ export const OmniTimeline = shadow_component(use => {
 
 	const timeline = use.defer(() => use.shadow.querySelector(".timeline-relative")) as GoldElement ?? use.element
 
-	return StateHandler(Op.all(
+	const {loadingState, errorState} = (omnislate as any).views
+	return StateHandler(loadingState, errorState)(Op.all(
 		use.context.helpers.ffmpeg.is_loading.value,
 		use.context.helpers.ffmpeg.is_loading.value), () => html`
-		${Toolbar([timeline])}
+		${Toolbar()([timeline])}
 		<div
 			class="timeline"
 			style="width: ${calculate_timeline_width(state.effects, state.zoom, use.element)}px;"
 		>
 			<div class=flex>
 				<button class="add-track" @click=${() => use.context.actions.add_track()}>add track</button>
-				${TimeRuler([timeline])}
+				${TimeRuler()([timeline])}
 			</div>
 			<div class="flex">
 				<div class="track-sidebars">
-					${use.context.state.tracks.map((t, i) => html`${TrackSidebar([i, t.id])}`)}
+					${use.context.state.tracks.map((t, i) => html`${TrackSidebar()([i, t.id])}`)}
 				</div>
 				<div class=timeline-relative>
 					${renderTimelineInfo()}
-					${Playhead([use.element])}
+					${Playhead()([use.element])}
 					${!noEffects ? render_tracks() : null}
 					${render_effects()}
-					${ProposalIndicator()}
-					${TransitionIndicator()}
+					${ProposalIndicator()()}
+					${TransitionIndicator()()}
 				</div>
 			</div>
 		</div>

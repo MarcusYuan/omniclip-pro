@@ -5,9 +5,9 @@ import {shadow_view} from "../../../../context/context.js"
 import {TextEffect as XTextEffect} from "../../../../context/types.js"
 import {getEffectsOnTrack} from "../../../../context/controllers/timeline/utils/get-effects-on-track.js"
 
-export const TextEffect = shadow_view(use => (effect: XTextEffect, timeline: GoldElement) => {
+export const TextEffect = () => shadow_view(use => (effect: XTextEffect, timeline: GoldElement) => {
 
-	return html`${Effect([
+	return html`${Effect()([
 		timeline,
 		effect,
 		html`${effect.text}`,

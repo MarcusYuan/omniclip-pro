@@ -1,5 +1,6 @@
 import {generate_id} from "@benev/slate"
 
+import {PIXI} from "../../../../proxies/pixi.js"
 import {Compositor} from "../controller.js"
 import {Actions} from "../../../actions.js"
 import {collaboration, omnislate} from "../../../context.js"
@@ -84,7 +85,7 @@ export class VideoManager extends Map<string, {sprite: PIXI.Sprite, transformer:
 		})
 		transformer.name = generate_id()
 		transformer.ignoreAlign = true
-		sprite.on('pointerdown', (e) => {
+		sprite.on('pointerdown', (e: PIXI.FederatedPointerEvent) => {
 			this.compositor.canvasElementDrag.onDragStart(e, sprite, transformer)
 			this.compositor.app.stage.addChild(transformer)
 		})

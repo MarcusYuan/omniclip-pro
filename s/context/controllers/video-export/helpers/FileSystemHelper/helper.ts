@@ -12,7 +12,7 @@ export class FileSystemHelper {
 		}
 		// For Chrome 83 and later.
 		const writable = await fileHandle.createWritable()
-		await writable.write(contents)
+		await writable.write(new Uint8Array(contents))
 		await writable.close()
 	}
 

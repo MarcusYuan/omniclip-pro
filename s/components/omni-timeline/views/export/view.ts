@@ -5,12 +5,13 @@ import {Tooltip} from "../../../../views/tooltip/view.js"
 import xMarkSvg from "../../../../icons/gravity-ui/x-mark.svg.js"
 import {tooltipStyles} from "../../../../views/tooltip/styles.js"
 import exportSvg from "../../../../icons/gravity-ui/export.svg.js"
+import {omnislate} from "../../../../context/context.js"
 import {StateHandler} from "../../../../views/state-handler/view.js"
 import {collaboration, shadow_view} from "../../../../context/context.js"
 import circleInfoSvg from "../../../../icons/gravity-ui/circle-info.svg.js"
 import {confirmModalStyles, exportOverlayStyles, styles} from "./styles.js"
 
-export const Export = shadow_view(use => () => {
+export const Export = () => shadow_view(use => () => {
 	use.styles([styles, tooltipStyles])
 	use.watch(() => use.context.state)
 
@@ -63,7 +64,8 @@ export const Export = shadow_view(use => () => {
 		`
 	}
 
-	return StateHandler(Op.all(
+	const {loadingState, errorState} = (omnislate as any).views
+	return StateHandler(loadingState, errorState)(Op.all(
 		use.context.helpers.ffmpeg.is_loading.value,
 		use.context.is_webcodecs_supported.value), () => html`
 		<div class="flex">
@@ -84,7 +86,7 @@ export const Export = shadow_view(use => () => {
 						<h4>Bitrate</h4>
 						<span>${state.settings.bitrate} kbps</span>
 					</div>
-					${Tooltip(
+					${Tooltip()(
 						html`
 							<button
 								?disabled=${state.settings.bitrate <= 0 || isClient}
@@ -94,15 +96,14 @@ export const Export = shadow_view(use => () => {
 								<span class="text">${exportSvg}<span>Export</span></span>
 							</button>
 						`,
-						html`${isClient ?  "Only host can export" : null}`
-					)}
+						html`${isClient ?  "Only host can export" : null}`)}
 				</div>
 			</div>
 		</div>
 	`)
 })
 
-export const ExportInProgressOverlay = shadow_view((use) => () => {
+export const ExportInProgressOverlay = () => shadow_view((use) => () => {
 	use.styles([exportOverlayStyles])
 	use.watch(() => use.context.state)
 
@@ -236,7 +237,7 @@ export const ExportInProgressOverlay = shadow_view((use) => () => {
 	`
 })
 
-export const ExportConfirmModal = shadow_view(use => (showModal: boolean, setShowModal: (v: boolean) => void) => {
+export const ExportConfirmModal = () => shadow_view(use => (showModal: boolean, setShowModal: (v: boolean) => void) => {
 	use.watch(() => use.context.state)
 	use.styles([confirmModalStyles])
 	const mediaController = use.context.controllers.media

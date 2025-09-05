@@ -5,7 +5,7 @@ import {shadow_view} from "../../../../context/context.js"
 import {AudioEffect as XAudioEffect} from "../../../../context/types.js"
 import {Waveform} from "../../../../context/controllers/timeline/parts/waveform.js"
 
-export const AudioEffect = shadow_view(use => (effect: XAudioEffect, timeline: GoldElement) => {
+export const AudioEffect = () => shadow_view(use => (effect: XAudioEffect, timeline: GoldElement) => {
 	const media = use.context.controllers.media
 	const compositor = use.context.controllers.compositor
 	const [wave, setWave] = use.state<null | HTMLDivElement>(null)
@@ -32,5 +32,5 @@ export const AudioEffect = shadow_view(use => (effect: XAudioEffect, timeline: G
 		}
 	})
 
-	return html`${Effect([timeline, effect, html`${wave}`])}`
+	return html`${Effect()([timeline, effect, html`${wave}`])}`
 })

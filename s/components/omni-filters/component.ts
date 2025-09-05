@@ -1,8 +1,9 @@
 import {Op, html, css, TemplateResult} from "@benev/slate"
+import * as PIXI from "pixi.js"
 
 import {styles} from "./styles.js"
 import {Tooltip} from "../../views/tooltip/view.js"
-import {shadow_component} from "../../context/context.js"
+import {omnislate, shadow_component} from "../../context/context.js"
 import {tooltipStyles} from "../../views/tooltip/styles.js"
 import {StateHandler} from "../../views/state-handler/view.js"
 import {ImageEffect, VideoEffect} from "../../context/types.js"
@@ -59,7 +60,7 @@ export const OmniFilters = shadow_component(use => {
 	}
 
 	const renderDropdownInfo = () => {
-		return Tooltip(
+		return Tooltip()(
 			circleInfoSvg,
 			html`<p>Select video or image either from dropdown menu here, timeline or scene</p>`
 		)
@@ -214,7 +215,8 @@ export const OmniFilters = shadow_component(use => {
 		`})
 	}
 
-	return StateHandler(Op.all(
+	const {loadingState, errorState} = (omnislate as any).views
+	return StateHandler(loadingState, errorState)(Op.all(
 		use.context.is_webcodecs_supported.value,
 		use.context.helpers.ffmpeg.is_loading.value), () =>  html`
 		<div class=box>

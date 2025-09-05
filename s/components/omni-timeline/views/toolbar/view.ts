@@ -13,7 +13,7 @@ import zoomInSvg from "../../../../icons/material-design-icons/zoom-in.svg.js"
 import {convert_ms_to_hmsms} from "../time-ruler/utils/convert_ms_to_hmsms.js"
 import zoomOutSvg from "../../../../icons/material-design-icons/zoom-out.svg.js"
 
-export const Toolbar = shadow_view(use => (timeline: GoldElement) => {
+export const Toolbar = () => shadow_view(use => (timeline: GoldElement) => {
 	use.styles([styles, tooltipStyles])
 	use.watch(() => use.context.state)
 	const actions = use.context.actions
@@ -31,8 +31,7 @@ export const Toolbar = shadow_view(use => (timeline: GoldElement) => {
 			<div class=tools>
 				<div class=flex>
 					<div class=history>
-						${Tooltip(
-							html`
+						${Tooltip()(html`
 								<button
 									?disabled=${use.context.history.past.length === 0}
 									?data-past=${use.context.history.past.length !== 0}
@@ -44,10 +43,8 @@ export const Toolbar = shadow_view(use => (timeline: GoldElement) => {
 									${undoSvg}
 								</button>
 							`,
-							html`<span>Undo</span>`
-						)}
-						${Tooltip(
-							html`
+							html`<span>Undo</span>`)}
+						${Tooltip()(html`
 								<button
 									?disabled=${use.context.history.future.length === 0}
 									?data-future=${use.context.history.future.length !== 0}
@@ -59,11 +56,9 @@ export const Toolbar = shadow_view(use => (timeline: GoldElement) => {
 									${redoSvg}
 								</button>
 							`,
-							html`<span>Redo</span>`
-						)}
+							html`<span>Redo</span>`)}
 					</div>
-					${Tooltip(
-						html`
+					${Tooltip()(html`
 							<button
 								@click=${() => controller.split(use.context.state)}
 								class="split"
@@ -71,10 +66,9 @@ export const Toolbar = shadow_view(use => (timeline: GoldElement) => {
 								${scissorsSvg}
 							</button>
 						`,
-						html`<span>Split</span>`
-					)}
-					${Tooltip(
-						html`
+						html`<span>Split</span>`)}
+					${Tooltip()
+						(html`
 							<button
 								class="remove"
 								?disabled=${!use.context.state.selected_effect}
@@ -82,23 +76,21 @@ export const Toolbar = shadow_view(use => (timeline: GoldElement) => {
 							>
 								${binSvg}
 							</button>`,
-						html`<span>Delete</span>`
-					)}
-					${Tooltip(
-						html`
+						html`<span>Delete</span>`)}
+					${Tooltip()
+						(html`
 							<button
 								@click=${() => use.context.clear_project()}
 								class="clean"
 							>
 								${cleanSvg}
 							</button>`,
-						html`<span>Clear Timeline</span>`
-					)}
+						html`<span>Clear Timeline</span>`)}
 				</div>
 				<div class=time>${convert_ms_to_hmsms(use.context.state.timecode)}</div>
 				<div class="zoom">
-					${Tooltip(
-						html`
+					${Tooltip()
+						(html`
 							<button
 								?disabled=${zoom >= 2}
 								@click=${() => actions.zoom_in({omit: true})}
@@ -106,10 +98,9 @@ export const Toolbar = shadow_view(use => (timeline: GoldElement) => {
 							>
 								${zoomInSvg}
 							</button>`,
-						html`<span>Zoom in</span>`
-					)}
-					${Tooltip(
-						html`
+						html`<span>Zoom in</span>`)}
+					${Tooltip()
+						(html`
 							<button
 								?disabled=${zoom <= -13}
 								@click=${() => actions.zoom_out({omit: true})}
@@ -118,8 +109,7 @@ export const Toolbar = shadow_view(use => (timeline: GoldElement) => {
 								${zoomOutSvg}
 							</button>
 						`,
-						html`<span>Zoom out</span>`
-					)}
+						html`<span>Zoom out</span>`)}
 				</div>
 			</div>
 		</div>

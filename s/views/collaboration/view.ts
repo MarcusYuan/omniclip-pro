@@ -11,7 +11,7 @@ import warningSvg from "../../icons/gravity-ui/warning.svg.js"
 import {collaboration, shadow_view} from "../../context/context.js"
 import collaborateSvg from "../../icons/gravity-ui/collaborate.svg.js"
 
-export const CollaborationManager = shadow_view((use) => () => {
+export const CollaborationManager = () => shadow_view((use) => () => {
 	use.styles(styles)
 
 	const [joiningOrCreatingInProgress, setJoiningOrCreatingInProgress] = use.state(false)

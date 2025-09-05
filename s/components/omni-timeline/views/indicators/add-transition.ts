@@ -1,12 +1,12 @@
 import {generate_id, html} from "@benev/slate"
 
-import {light_view} from "../../../../context/context.js"
+import {omnislate} from "../../../../context/context.js"
 import transitionSvg from "../../../../icons/transition.svg.js"
 import {calculate_start_position} from "../../utils/calculate_start_position.js"
 import {calculate_effect_track_placement} from "../../utils/calculate_effect_track_placement.js"
 import {normalizeTransitionDuration} from "../../../omni-transitions/utils/normalize-transition-duration.js"
 
-export const TransitionIndicator = light_view(use => () => {
+export const TransitionIndicator = () => omnislate.light_view(use => () => {
 	use.watch(() => use.context.state)
 	const state = use.context.state
 	const transitionManager = use.context.controllers.compositor.managers.transitionManager

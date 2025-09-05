@@ -10,7 +10,7 @@ import lockOpenSvg from "../../../../icons/gravity-ui/lock-open.svg.js"
 import volumeSlashSvg from "../../../../icons/gravity-ui/volume-slash.svg.js"
 import {getEffectsOnTrack} from "../../../../context/controllers/timeline/utils/get-effects-on-track.js"
 
-export const TrackSidebar = shadow_view(use => (index: number, trackId: string) => {
+export const TrackSidebar = () => shadow_view(use => (index: number, trackId: string) => {
 	use.styles(styles)
 	use.watch(() => use.context.state)
 

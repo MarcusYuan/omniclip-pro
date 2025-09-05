@@ -4,7 +4,7 @@ import {styles} from "./styles.js"
 import {TextEffect} from "../../context/types.js"
 import {FontMetadata} from "../../context/global.js"
 import addSvg from "../../icons/gravity-ui/add.svg.js"
-import {shadow_component} from "../../context/context.js"
+import {omnislate, shadow_component} from "../../context/context.js"
 import xMarkSvg from "../../icons/gravity-ui/x-mark.svg.js"
 import {StateHandler} from "../../views/state-handler/view.js"
 import arrowupSvg from "../../icons/gravity-ui/arrowup.svg.js"
@@ -240,7 +240,8 @@ export const OmniText = shadow_component(use => {
 
 	const textEffects = use.context.state.effects.filter(e => e.kind === "text") as TextEffect[]
 
-	return StateHandler(Op.all(
+	const {loadingState, errorState} = (omnislate as any).views
+	return StateHandler(loadingState, errorState)(Op.all(
 		use.context.helpers.ffmpeg.is_loading.value,
 		use.context.is_webcodecs_supported.value), () => html`
 		<div class="examples">

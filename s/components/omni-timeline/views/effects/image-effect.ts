@@ -4,7 +4,7 @@ import {Effect} from "./parts/effect.js"
 import {shadow_view} from "../../../../context/context.js"
 import {ImageEffect as XImageEffect} from "../../../../context/types.js"
 
-export const ImageEffect = shadow_view(use => (effect: XImageEffect, timeline: GoldElement) => {
+export const ImageEffect = () => shadow_view(use => (effect: XImageEffect, timeline: GoldElement) => {
 	use.watch(() => use.context.state)
 	const media = use.context.controllers.media
 	const compositor = use.context.controllers.compositor
@@ -31,5 +31,5 @@ export const ImageEffect = shadow_view(use => (effect: XImageEffect, timeline: G
 		return () => dispose()
 	})
 
-	return html`${Effect([timeline, effect, html``, css``, `${imageURL ? `background-image: url(${imageURL});` : null}background-size: contain;`])}`
+	return html`${Effect()([timeline, effect, html``, css``, `${imageURL ? `background-image: url(${imageURL});` : null}background-size: contain;`])}`
 })

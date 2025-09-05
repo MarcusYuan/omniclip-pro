@@ -2,11 +2,12 @@ import {Op, html} from "@benev/slate"
 
 import {styles} from "./styles.js"
 import {shadow_view} from "../../context/context.js"
+import {omnislate} from "../../context/context.js"
 import {StateHandler} from "../state-handler/view.js"
 import {AspectRatio, Standard} from "../../context/types.js"
 import {aspectRatios, standards, timebases} from "./constants.js"
 
-export const ProjectSettings = shadow_view(use => () => {
+export const ProjectSettings = () => shadow_view(use => () => {
 	use.styles(styles)
 	use.watch(() => use.context.state)
 
@@ -172,7 +173,8 @@ export const ProjectSettings = shadow_view(use => () => {
 		`
 	}
 
-	return StateHandler(Op.all(
+	const {loadingState, errorState} = (omnislate as any).views
+	return StateHandler(loadingState, errorState)(Op.all(
 		use.context.is_webcodecs_supported.value,
 		use.context.helpers.ffmpeg.is_loading.value), () => html`
 			<div class=settings>

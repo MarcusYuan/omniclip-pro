@@ -24,9 +24,6 @@ declare global {
 	}
 }
 
-declare global {
-	const PIXI: typeof import("pixi.js")
-}
 
 export interface GLTransition {
 	author: string

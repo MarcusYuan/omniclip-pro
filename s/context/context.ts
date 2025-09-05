@@ -162,4 +162,4 @@ export class OmniContext extends Context {
 }
 
 export const omnislate = slate as Nexus<OmniContext>
-export const {shadow_component, shadow_view, light_view, light_component} = omnislate
+export const {shadow_component, shadow_view, light_component} = omnislate

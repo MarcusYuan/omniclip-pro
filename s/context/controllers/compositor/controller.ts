@@ -1,4 +1,5 @@
 import {pub, reactor, signal} from "@benev/slate"
+import {PIXI} from "../../../proxies/pixi.js"
 
 import {Actions} from "../../actions.js"
 import {omnislate} from "../../context.js"
@@ -34,7 +35,7 @@ export class Compositor {
 	timebase = 25
 	currently_played_effects = new Map<string, AnyEffect>()
 
-	app = new PIXI.Application({width: 1920, height: 1080, backgroundColor: "black", preference: "webgl"})
+	app = new PIXI.Application({width: 1920, height: 1080, backgroundColor: 0x000000, premultipliedAlpha: true})
 	#seekedResolve: ((value: unknown) => void) | null = null
 	#recreated = false
 	
@@ -104,7 +105,7 @@ export class Compositor {
 			let position = e.getLocalPosition(sprite)
 			sprite.pivot.set(position.x, position.y)
 			sprite.position.set(e.global.x, e.global.y)
-			this.app.stage.on('pointermove', (e) => this.canvasElementDrag.onDragMove(e))
+			this.app.stage.on('pointermove', (e: PIXI.FederatedPointerEvent) => this.canvasElementDrag.onDragMove(e))
 		},
 		onDragEnd: () => {
 			if (this.selectedElement) {
@@ -189,8 +190,8 @@ export class Compositor {
 			const effect = e as ImageEffect | VideoEffect | TextEffect
 			const object = this.getObject(effect)
 			if(object) {
-				object.sprite.zIndex = omnislate.context.state.tracks.length - effect.track
-				object.transformer.zIndex = omnislate.context.state.tracks.length - effect.track
+				(object.sprite as any).zIndex = omnislate.context.state.tracks.length - effect.track;
+				(object.transformer as any).zIndex = omnislate.context.state.tracks.length - effect.track
 			}
 		})
 	}
@@ -323,30 +324,31 @@ export class Compositor {
 	}
 
 	#on_selected_canvas_object() {
-		this.app.stage.on("pointerdown", (e) => {
-			//@ts-ignore
-			const selected_effect = e.target ? e.target.effect as AnyEffect : undefined
-			const effect = omnislate.context.state.effects.find(e => e.id === selected_effect?.id)
-			omnislate.context.controllers.timeline.set_selected_effect(effect, omnislate.context.state)
+		this.app.stage.on("pointerdown", (e: PIXI.FederatedPointerEvent) => {
+			if(e.target instanceof PIXI.DisplayObject) {
+				const selected_effect = e.target ? (e.target as any).effect as AnyEffect : undefined
+				const effect = omnislate.context.state.effects.find(e => e.id === selected_effect?.id)
+				omnislate.context.controllers.timeline.set_selected_effect(effect, omnislate.context.state)
+			}
 		})
-		this.app.stage.on("pointerup", (e) => {
-			//@ts-ignore
-			const selected_effect = e.target ? e.target.effect as Exclude<AnyEffect, AudioEffect> : null
-			if(selected_effect) {
-				this.actions.set_pivot(selected_effect, e.target.pivot.x, e.target.pivot.y)
-				const {rect: {position_on_canvas: {x, y}}} = selected_effect
-				if(x !== e.global.x || y !== e.global.y) {
-					const {x, y} = e.target
-					this.actions.set_position_on_canvas(selected_effect, x, y);
-					this.actions.set_rotation(selected_effect, e.target.angle)
-					this.actions.set_effect_scale(selected_effect, {x: e.target.scale.x, y: e.target.scale.y})
-					//@ts-ignore
-					e.target.effect = {...e.target.effect,
-						rect: {position_on_canvas: {x, y},
-						rotation: e.target.angle,
-						scaleX: e.target.scale.x,
-						scaleY: e.target.scale.y}
-					} as Exclude<AnyEffect, AudioEffect>
+		this.app.stage.on("pointerup", (e: PIXI.FederatedPointerEvent) => {
+			if(e.target instanceof PIXI.DisplayObject) {
+				const selected_effect = e.target ? (e.target as any).effect as Exclude<AnyEffect, AudioEffect> : null
+				if(selected_effect) {
+					this.actions.set_pivot(selected_effect, e.target.pivot.x, e.target.pivot.y)
+					const {rect: {position_on_canvas: {x, y}}} = selected_effect
+					if(x !== e.global.x || y !== e.global.y) {
+						const {x, y} = e.target
+						this.actions.set_position_on_canvas(selected_effect, x, y);
+						this.actions.set_rotation(selected_effect, e.target.angle)
+						this.actions.set_effect_scale(selected_effect, {x: e.target.scale.x, y: e.target.scale.y});
+						(e.target as any).effect = {...(e.target as any).effect,
+							rect: {position_on_canvas: {x, y},
+							rotation: e.target.angle,
+							scaleX: e.target.scale.x,
+							scaleY: e.target.scale.y}
+						} as Exclude<AnyEffect, AudioEffect>
+					}
 				}
 			}
 		})
@@ -390,10 +392,9 @@ export class Compositor {
 	}
 
 	update_canvas_objects(state: State) {
-		this.app.stage.children.forEach(object => {
-			if(!(object instanceof PIXI.Rectangle)) {
-				//@ts-ignore
-				const object_effect = object.effect as Exclude<AnyEffect, AudioEffect>
+		this.app.stage.children.forEach((object: any) => {
+			if(object instanceof PIXI.DisplayObject) {
+				const object_effect = (object as any).effect as Exclude<AnyEffect, AudioEffect>
 				const effect = state.effects.find(effect => effect.id === object_effect?.id) as Exclude<AnyEffect, AudioEffect>
 				if(effect) {
 					object.x = effect.rect.position_on_canvas.x

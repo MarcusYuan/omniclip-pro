@@ -1,6 +1,7 @@
 import gsap from "gsap"
 import {pub} from "@benev/slate"
 
+import {PIXI} from "../../../../proxies/pixi.js"
 import {Compositor} from "../controller.js"
 import {Actions} from "../../../actions.js"
 import {omnislate} from "../../../context.js"
@@ -294,8 +295,8 @@ export class AnimationManager {
 					this.#animations = this.#animations.filter(animation => !(animation.targetEffect.id === effect.id && animation.type === type))
 					if (!refresh) {
 						this.actions.remove_animation(effect, type, this.animationFor, {omit})
-						if(object.mask instanceof PIXI.Container) {
-							object.mask.destroy()
+						if(object.mask) {
+							(object.mask as PIXI.Graphics).destroy()
 							object.mask = null
 						}
 					}
@@ -481,7 +482,7 @@ export class AnimationManager {
 	#handleWipeIn(object: PIXI.Container, effect: ImageEffect | VideoEffect, animation: Animation, tweenDuration: number) {
 		const fullWidth = object.width
 		const fullHeight = object.height
-		if(!(object.mask instanceof PIXI.Container)) {
+		if(!(object.mask instanceof PIXI.Graphics)) {
 			const maskGraphics = new PIXI.Graphics()
 			maskGraphics.beginFill(0xffffff)
 			maskGraphics.drawRect(0, 0, 0, fullHeight)
@@ -497,11 +498,11 @@ export class AnimationManager {
 			ease: "linear",
 			data: { animationFor: this.animationFor },
 			onUpdate: () => {
-				if(object.mask instanceof PIXI.Graphics) {
-					object.mask.clear()
-					object.mask.beginFill(0xffffff)
-					object.mask.drawRect(0, 0, dummy.width, fullHeight)
-					object.mask.endFill()
+				if(object.mask) {
+					(object.mask as PIXI.Graphics).clear()
+					;(object.mask as PIXI.Graphics).beginFill(0xffffff)
+					;(object.mask as PIXI.Graphics).drawRect(0, 0, dummy.width, fullHeight)
+					;(object.mask as PIXI.Graphics).endFill()
 				}
 			}
 		})
@@ -514,7 +515,7 @@ export class AnimationManager {
 		const fullWidth = object.width
 		const fullHeight = object.height
 		
-		if (!(object.mask instanceof PIXI.Container)) {
+		if (!(object.mask instanceof PIXI.Graphics)) {
 			const maskGraphics = new PIXI.Graphics()
 			maskGraphics.beginFill(0xffffff)
 			maskGraphics.drawRect(0, 0, fullWidth, fullHeight)
@@ -530,11 +531,11 @@ export class AnimationManager {
 			ease: "linear",
 			data: { animationFor: this.animationFor },
 			onUpdate: () => {
-				if (object.mask instanceof PIXI.Graphics) {
-					object.mask.clear()
-					object.mask.beginFill(0xffffff)
-					object.mask.drawRect(0, 0, dummy.width, fullHeight)
-					object.mask.endFill()
+				if (object.mask) {
+					(object.mask as PIXI.Graphics).clear()
+					;(object.mask as PIXI.Graphics).beginFill(0xffffff)
+					;(object.mask as PIXI.Graphics).drawRect(0, 0, dummy.width, fullHeight)
+					;(object.mask as PIXI.Graphics).endFill()
 				}
 			},
 		})
@@ -577,42 +578,50 @@ export class AnimationManager {
 			ease: "linear",
 			data: { animationFor: this.animationFor },
 		})
+
 		const startTime = (effect.start_at_position + (effect.end - effect.start) - animation.duration) / 1000
-		return {tween, startTime}
+		return { tween, startTime }
 	}
 
 	#handleZoomIn(object: PIXI.Container, effect: ImageEffect | VideoEffect, animation: Animation, tweenDuration: number) {
 		const tween = gsap.fromTo(
 			object.scale,
-			{ x: 0.4, y: 0.4 },
 			{
-				x: 1,
-				y: 1,
-				duration: tweenDuration,
+				animationName: animation.type,
+				x: 0,
+				y: 0,
 				ease: "linear",
-				data: { animationFor: this.animationFor },
-				onUpdate: () => this.#onAnimationUpdate(object, animation)
+			},
+			{
+				x: effect.rect.scaleX,
+				y: effect.rect.scaleY,
+				duration: tweenDuration,
+				data: {animationFor: this.animationFor},
+				onUpdate: () => this.#onAnimationUpdate(object, animation),
 			}
 		)
-
 		const startTime = effect.start_at_position / 1000
-		return { tween, startTime }
+		return {tween, startTime}
 	}
 
 	#handleZoomOut(object: PIXI.Container, effect: ImageEffect | VideoEffect, animation: Animation, tweenDuration: number) {
-		const tween = gsap.fromTo(object.scale,
-			{ x: 1, y: 1 },
+		const tween = gsap.fromTo(
+			object.scale,
 			{
-				x: 0.4,
-				y: 0.4,
-				duration: tweenDuration,
+				animationName: animation.type,
+				x: effect.rect.scaleX,
+				y: effect.rect.scaleY,
 				ease: "linear",
-				data: { animationFor: this.animationFor },
-				onUpdate: () => this.#onAnimationUpdate(object, animation)
+			},
+			{
+				x: 0,
+				y: 0,
+				duration: tweenDuration,
+				data: {animationFor: this.animationFor},
+				onUpdate: () => this.#onAnimationUpdate(object, animation),
 			}
 		)
-
 		const startTime = (effect.start_at_position + (effect.end - effect.start) - animation.duration) / 1000
-		return { tween, startTime }
+		return {tween, startTime}
 	}
 }

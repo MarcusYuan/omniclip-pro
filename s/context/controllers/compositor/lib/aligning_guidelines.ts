@@ -1,5 +1,6 @@
 import {Keys} from "./util.js"
 import {Compositor} from "../controller.js"
+import {PIXI} from "../../../../proxies/pixi.js"
 
 type VerticalLineCoords = {
 	x: number;
@@ -144,7 +145,7 @@ export class AlignGuidelines {
 		this.clearGuideline()
 		const activeObject = this.compositor.selectedElement?.sprite
 		if(!activeObject) {return}
-		const canvasObjects = this.compositor.app.stage.children.filter(obj => {
+		const canvasObjects = this.compositor.app.stage.children.filter((obj: any) => {
 			if (this.ignoreObjTypes.length) {
 				return !this.ignoreObjTypes.some(item => (obj as any)[item.key] === item.value)
 			}

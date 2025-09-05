@@ -1,6 +1,6 @@
 import {SVGTemplateResult, TemplateResult, html} from "@benev/slate"
 
-import {light_view} from "../../context/context.js"
+import {omnislate} from "../../context/context.js"
 import type {
 	computePosition as ComputePosition,
 	autoUpdate as AutoUpdate,
@@ -27,7 +27,7 @@ const computePosition = untypedComputePosition as typeof ComputePosition
 const autoUpdate = untypedAutoUpdate as typeof AutoUpdate
 const hide = untypedHide as typeof Hide
 
-export const Tooltip = light_view(use => (icon: SVGTemplateResult | TemplateResult, content: TemplateResult, iconContainerStyles?: string, placement?: Placement) => {
+export const Tooltip = () => omnislate.light_view(use => (icon: SVGTemplateResult | TemplateResult, content: TemplateResult, iconContainerStyles?: string, placement?: Placement) => {
 	const elements = use.signal<Stuff | null>(null)
 
 	use.defer(() => {

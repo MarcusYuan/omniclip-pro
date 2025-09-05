@@ -3,7 +3,7 @@ import {GoldElement, html, watch} from "@benev/slate"
 import {styles} from "./styles.js"
 import {shadow_view} from "../../../../context/context.js"
 
-export const TimeRuler = shadow_view(use => (timeline: GoldElement) => {
+export const TimeRuler = () => shadow_view(use => (timeline: GoldElement) => {
 	use.styles(styles)
 	const [timeCodes, setTimeCodes] = use.state<{time: string, offset: number, kind: "normal" | "dot"}[]>([])
 	const [_, setPrevTimecode, getPrevTimecode] = use.state<null | number>(null)

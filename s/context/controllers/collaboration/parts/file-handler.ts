@@ -52,7 +52,7 @@ export class FileHandler {
 	}
 
 	sendChunk(compressedChunk: Uint8Array, hash: string, dataChannel: RTCDataChannel) {
-		this.#sendChunkWithHash(dataChannel, compressedChunk, hash)
+		this.#sendChunkWithHash(dataChannel, new Uint8Array(compressedChunk).buffer, hash)
 	}
 
 	sendFile(file: File, hash: string, dataChannel: RTCDataChannel, total: number) {
@@ -141,7 +141,7 @@ export class FileHandler {
 								"-map", "0:v:0","-c:v" ,"copy", "-y", `${hash}.mp4`
 							])
 							const muxed_file = await ffmpeg.get_muxed_file(`${hash}.mp4`)
-							const file = new File([muxed_file], name, {type})
+							const file = new File([new Uint8Array(muxed_file)], name, {type})
 							this.receivedFiles.push({hash, proxy, receivedFrom: connection})
 							onComplete(hash, file, proxy)
 							delete this.binary_accumulators[hash]
@@ -155,7 +155,7 @@ export class FileHandler {
 					onProgress(hash, this.binary_accumulators[hash].size, total)
 					this.collaboration.onFileProgress.publish({progress: (this.binary_accumulators[hash].size / total) * 100, hash})
 					if(received >= total) {
-						const file = new File([this.binary_accumulators[hash].binary], name, {type})
+						const file = new File([new Uint8Array(this.binary_accumulators[hash].binary)], name, {type})
 						this.receivedFiles.push({hash, proxy, receivedFrom: connection})
 						onComplete(hash, file, proxy)
 						delete this.binary_accumulators[hash]

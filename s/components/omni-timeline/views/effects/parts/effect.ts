@@ -9,7 +9,7 @@ import {calculate_start_position} from "../../../utils/calculate_start_position.
 import lowQualitySvg from "../../../../../icons/material-design-icons/low-quality.svg.js"
 import {calculate_effect_track_placement} from "../../../utils/calculate_effect_track_placement.js"
 
-export const Effect = shadow_view(use => (timeline: GoldElement, any_effect: AnyEffect, content: TemplateResult, style?: CSSResultGroup, inline_css?: string) => {
+export const Effect = () => shadow_view(use => (timeline: GoldElement, any_effect: AnyEffect, content: TemplateResult, style?: CSSResultGroup, inline_css?: string) => {
 	use.styles([style ?? css``, styles])
 	use.watch(() => use.context.state)
 	const state = use.context.state

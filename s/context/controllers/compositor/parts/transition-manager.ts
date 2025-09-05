@@ -1,6 +1,7 @@
 import gsap from "gsap"
 import {pub} from '@benev/slate'
 import "gl-transitions/gl-transitions.js"
+import {PIXI} from "../../../../proxies/pixi.js"
 
 import {Actions} from '../../../actions.js'
 import {Compositor} from '../controller.js'

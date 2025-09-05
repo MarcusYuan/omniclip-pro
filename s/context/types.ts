@@ -3,6 +3,7 @@ import {BroadcastOptions} from "../utils/with-broadcast.js"
 import {Filter} from "./controllers/compositor/parts/filter-manager.js"
 import {Animation} from "./controllers/compositor/parts/animation-manager.js"
 import {Transition} from "./controllers/compositor/parts/transition-manager.js"
+import {PIXI} from "../proxies/pixi.js"
 import type {
 	ColorSource, TEXT_GRADIENT, TextStyleAlign, TextStyleFontStyle, TextStyleFontVariant, TextStyleFontWeight, TextStyleTextBaseline, TextStyleWhiteSpace
 } from "pixi.js"

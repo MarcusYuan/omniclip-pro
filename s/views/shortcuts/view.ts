@@ -4,7 +4,7 @@ import {shadow_view} from "../../context/context.js"
 import keyboardSvg from "../../icons/gravity-ui/keyboard.svg.js"
 import {ActionType} from "../../context/controllers/shortcuts/controller.js"
 
-export const ShortcutsManager = shadow_view((use) => () => {
+export const ShortcutsManager = () => shadow_view((use) => () => {
 	use.styles(styles)
 	const manager = use.context.controllers.shortcuts
 
